@@ -1,0 +1,7 @@
+spring:
+  r2dbc:
+    url: r2dbcs:mysql://127.0.0.1:3306/pionner
+    username: root
+    password: Terran1942
+  jackson:
+    default-property-inclusion: non_null
