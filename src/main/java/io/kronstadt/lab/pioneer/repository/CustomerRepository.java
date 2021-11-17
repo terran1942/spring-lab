@@ -9,10 +9,17 @@ import reactor.core.publisher.Mono;
 
 //@Repository
 public interface CustomerRepository extends ReactiveCrudRepository<Customer, Long> {
-    @Query("SELECT id, username, level FROM customer WHERE username = :username AND password = :password")
-    Mono<Customer> find(String username, String password);
+    @Query("SELECT id, username, level, email FROM customer WHERE username = :username AND password = :password")
+    Mono<Customer> findByUsernameAndPassword(String username, String password);
+
+    @Query("SELECT id, username, level, email FROM customer WHERE username = :username")
+    Mono<Customer> getProfile(String username);
 
     @Modifying
     @Query("UPDATE customer SET password = :password WHERE username = :username")
-    Mono<Customer> updatePassword(String username, String password);
+    Mono<Long> updatePassword(String username, String password);
+
+    @Modifying
+    @Query("UPDATE customer SET email = :email WHERE username = :username")
+    Mono<Long> updateEmail(String username, String email);
 }

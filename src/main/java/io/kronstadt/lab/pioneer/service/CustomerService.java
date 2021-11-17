@@ -17,20 +17,26 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Flux<Customer> findAll(){
+    public Flux<Customer> findAll() {
         return this.customerRepository.findAll();
     }
 
-    public Mono<Customer> find(String username, String password){
-        return this.customerRepository.find(username, password);
+    public Mono<Customer> findCustomer(String username, String password) {
+        return this.customerRepository.findByUsernameAndPassword(username, password);
     }
 
-    public Mono<Customer> updatePassword(String username, String newPassword){
+    public Mono<Long> updatePassword(String username, String newPassword) {
         try {
-            return this.customerRepository.updatePassword(username, Digest.sha256(newPassword));
+            newPassword = Digest.sha256(newPassword);
         } catch (NoSuchAlgorithmException e) {
             log.error(e.getMessage(), e);
             return Mono.error(e);
         }
+        return this.customerRepository.updatePassword(username, newPassword);
+    }
+
+    public Mono<Customer> updateEmail(String username, String email) {
+         return this.customerRepository.updateEmail(username, email)
+                 .then(this.customerRepository.getProfile(username));
     }
 }

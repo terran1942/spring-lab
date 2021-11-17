@@ -5,7 +5,6 @@ import io.kronstadt.lab.pioneer.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -22,11 +21,16 @@ public class CustomerController {
 
     @GetMapping("/customer")
     public Mono<Customer> find(String username, String password){
-        return this.customerService.find(username, password);
+        return this.customerService.findCustomer(username, password);
     }
 
     @PatchMapping("/customer/password")
-    public Mono<Customer> updatePassword(String username, String password){
+    public Mono<Long> updatePassword(String username, String password){
         return this.customerService.updatePassword(username, password);
+    }
+
+    @PatchMapping("/customer/email")
+    public Mono<Customer> updateEmail(String username, String email){
+        return this.customerService.updateEmail(username, email);
     }
 }
